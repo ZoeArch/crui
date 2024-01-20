@@ -75,27 +75,9 @@ def array_add_with_offset(
         raise ValueError("Added array with this width offset is out of bounds")
 
 
-def print_frame2(frame_to_print):
-    for i in frame_to_print:
-        local_array = i
-        current_location = 0
-        for i in local_array:
-            print(local_array[current_location], end="", sep="")
-            current_location = +1
-        print("\n", end="", sep="")
 
 
 def print_frame(frame_to_print):
-    for i in frame_to_print:
-        local_array = i
-        current_location = 0
-        for j in local_array:
-            print(j, end="", sep="")
-            current_location += 1  # Fix the increment here
-        print("\n", end="", sep="")
-
-
-def print_frame3(frame_to_print):
     for i in frame_to_print:
         local_array = i
         for x in range(len(local_array)):
@@ -145,7 +127,7 @@ def make_box(border: str, box_height: int, box_width: int):
 
 
 # print_frame(frame)
-print_frame3(make_box("thin", 10, 10))
+print_frame(make_box("thin", 10, 10))
 input("")
 print("next")
-print_frame3(make_box("thick", term_height, term_width))
+print_frame(make_box("thick", term_height, term_width))
