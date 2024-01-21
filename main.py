@@ -54,7 +54,7 @@ term_width = term_size.columns
 term_height = term_size.lines
 
 # create the "frame" array
-fill_char = "0"
+fill_char = " "
 width_fill = []
 frame = []
 for i in range(term_width):
@@ -63,7 +63,7 @@ for i in range(term_height):
     frame.append(width_fill)
 
 
-def array_add_with_offset(
+def draw_window_over_window(
     array_to_add_to: list,
     array_to_be_added: list,
     offset_height: int,
@@ -74,10 +74,16 @@ def array_add_with_offset(
     if len(array_to_add_to[0]) < len(array_to_be_added[0]) + offset_width:
         raise ValueError("Added array with this width offset is out of bounds")
 
+    for i in range(len(array_to_be_added)):
+        for j in range(len(array_to_be_added[0])):
+            # Replace the corresponding elements in the target array at the specified offset
+            array_to_add_to[i + offset_height][j + offset_width] = array_to_be_added[i][
+                j
+            ]
+    return array_to_add_to
 
 
-
-def print_frame(frame_to_print):
+def print_to_console(frame_to_print):
     for i in frame_to_print:
         local_array = i
         for x in range(len(local_array)):
@@ -85,7 +91,7 @@ def print_frame(frame_to_print):
         print("\n", end="", sep="")
 
 
-def make_box(border: str, box_height: int, box_width: int):
+def make_window(border: str, box_height: int, box_width: int):
     box_height = box_height - 2
     box_width = box_width - 2
     output = []
@@ -127,7 +133,18 @@ def make_box(border: str, box_height: int, box_width: int):
 
 
 # print_frame(frame)
-print_frame(make_box("thin", 10, 10))
-input("")
-print("next")
-print_frame(make_box("thick", term_height, term_width))
+# print_frame(make_window("thin", 10, 10))
+# input("")
+# print("next")
+# print_frame(make_window("thick", term_height, term_width))
+
+main_frame = make_window("double_thin", term_height, term_width)
+print_to_console(main_frame)
+subframe1 = make_window("thick", 10, 10)
+print_to_console(subframe1)
+subframe2 = make_window("thin", 10, 10)
+print_to_console(subframe2)
+
+main_frame = draw_window_over_window(main_frame, subframe1, 3, 3)
+main_frame = draw_window_over_window(main_frame, subframe2, 20, 20)
+print_to_console(main_frame)
