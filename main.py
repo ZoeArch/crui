@@ -1,7 +1,7 @@
 import os
 import shutil
 
-# Terminology
+# terminology
 # frame = the current array to draw
 # window = the individual parts of the frame to be drawn
 
@@ -46,10 +46,10 @@ double_line_dict = {
 }
 
 
-# Get terminal size and store it in the variable temp
+# get terminal size and store it in the variable temp
 term_size = shutil.get_terminal_size()
 
-# Access the width and height
+# access the width and height
 term_width = term_size.columns
 term_height = term_size.lines
 
@@ -70,13 +70,13 @@ def draw_window_over_window(
     offset_width: int,
 ):
     if len(array_to_add_to) < len(array_to_be_added) + offset_height:
-        raise ValueError("Added array with this height offset is out of bounds")
+        raise ValueError("added array with this height offset is out of bounds")
     if len(array_to_add_to[0]) < len(array_to_be_added[0]) + offset_width:
-        raise ValueError("Added array with this width offset is out of bounds")
+        raise ValueError("added array with this width offset is out of bounds")
 
     for i in range(len(array_to_be_added)):
         for j in range(len(array_to_be_added[0])):
-            # Replace the corresponding elements in the target array at the specified offset
+            # replace the corresponding elements in the target array at the specified offset
             array_to_add_to[i + offset_height][j + offset_width] = array_to_be_added[i][
                 j
             ]
@@ -103,7 +103,7 @@ def make_window(border: str, box_height: int, box_width: int):
         case "double_thin":
             local_dict = double_line_dict
         case _:
-            raise ValueError("Needs to be an acceptable type of border")
+            raise ValueError("needs to be an acceptable type of border")
 
     top_edge = []
     top_edge.append(local_dict["corner_top_left"])
@@ -111,7 +111,7 @@ def make_window(border: str, box_height: int, box_width: int):
         top_edge.append(local_dict["horizontal"])
     top_edge.append(local_dict["corner_top_right"])
 
-    output.append(top_edge.copy())  # Copy the top edge to preserve it
+    output.append(top_edge.copy())  # copy the top edge to preserve it
 
     middle = []
     middle.append(local_dict["vertical"])
@@ -120,7 +120,7 @@ def make_window(border: str, box_height: int, box_width: int):
     middle.append(local_dict["vertical"])
 
     for i in range(box_height - 2):
-        output.append(middle.copy())  # Copy the middle row
+        output.append(middle.copy())  # copy the middle row
 
     bottom_edge = []
     bottom_edge.append(local_dict["corner_bottom_left"])
@@ -128,23 +128,22 @@ def make_window(border: str, box_height: int, box_width: int):
         bottom_edge.append(local_dict["horizontal"])
     bottom_edge.append(local_dict["corner_bottom_right"])
 
-    output.append(bottom_edge.copy())  # Copy the bottom edge
+    output.append(bottom_edge.copy())  # copy the bottom edge
     return output
 
 
-# print_frame(frame)
-# print_frame(make_window("thin", 10, 10))
-# input("")
-# print("next")
-# print_frame(make_window("thick", term_height, term_width))
+def add_window_title(window: list, title: str, left_beauty: str, right_beauty: str):
+    if (len(window[0]) - 2) <= len(title) + len(left_beauty) + len(right_beauty):
+        raise ValueError("title + beautys is too long")
+    top_edge = window[0]
+    space_to_write = len(top_edge)
+    text_with_beauty = left_beauty + title + right_beauty
+    spacing = space_to_write - len(text_with_beauty)
+    spacing = spacing // 2
+    window = draw_window_over_window(window, [list(text_with_beauty)], 0, spacing + 1)
+    return window
 
-main_frame = make_window("double_thin", term_height, term_width)
-print_to_console(main_frame)
-subframe1 = make_window("thick", 10, 10)
-print_to_console(subframe1)
-subframe2 = make_window("thin", 10, 10)
-print_to_console(subframe2)
 
-main_frame = draw_window_over_window(main_frame, subframe1, 3, 3)
-main_frame = draw_window_over_window(main_frame, subframe2, 20, 20)
-print_to_console(main_frame)
+window = make_window("thin", term_height, term_width)
+window = add_window_title(window, "testestestestest", "🞀[", "]🞂")
+print_to_console(window)
