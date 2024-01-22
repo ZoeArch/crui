@@ -44,11 +44,7 @@ double_line_dict = {
     "crossing": "\u256c",  # ╬
 }
 
-dicts = {
-    "thin": thin_dict,
-    "thick": thick_dict,
-    "thin_double": double_line_dict
-}
+dicts = {"thin": thin_dict, "thick": thick_dict, "thin_double": double_line_dict}
 
 # get terminal size and store it in the variable temp
 term_size = shutil.get_terminal_size()
@@ -68,10 +64,10 @@ for i in range(term_height):
 
 
 def draw_window_over_window(
-        array_to_add_to: list,
-        array_to_be_added: list,
-        offset_height: int,
-        offset_width: int,
+    array_to_add_to: list,
+    array_to_be_added: list,
+    offset_height: int,
+    offset_width: int,
 ):
     if len(array_to_add_to) < len(array_to_be_added) + offset_height:
         raise ValueError("added array with this height offset is out of bounds")
@@ -81,12 +77,14 @@ def draw_window_over_window(
     for x in range(len(array_to_be_added)):
         for y in range(len(array_to_be_added[0])):
             # replace the corresponding elements in the target array at the specified offset
-            array_to_add_to[x + offset_height][y + offset_width] = array_to_be_added[x][y]
+            array_to_add_to[x + offset_height][y + offset_width] = array_to_be_added[x][
+                y
+            ]
     return array_to_add_to
 
 
 def print_to_console(frame_to_print):
-    print('\n'.join(''.join(str(x) for x in i) for i in frame_to_print))
+    print("\n".join("".join(str(x) for x in i) for i in frame_to_print))
 
 
 def make_window(border: str, box_height: int, box_width: int):
@@ -95,7 +93,8 @@ def make_window(border: str, box_height: int, box_width: int):
     output = []
 
     local_dict = dicts.get(border, None)
-    if local_dict is None: raise ValueError("needs to be an acceptable type of border")
+    if local_dict is None:
+        raise ValueError("needs to be an acceptable type of border")
 
     # header
     header = [local_dict["horizontal"] for _ in range(box_width + 1)]
@@ -109,7 +108,8 @@ def make_window(border: str, box_height: int, box_width: int):
 
     output.append(header.copy())
     row = [local_dict["vertical"], fill_char * box_width, local_dict["vertical"]]
-    for _ in range(box_height - 2): output.append(row.copy())
+    for _ in range(box_height - 2):
+        output.append(row.copy())
     output.append(footer.copy())
 
     return output
@@ -126,9 +126,8 @@ def add_window_title(window: list, title: str, left_beauty: str, right_beauty: s
     return draw_window_over_window(window, [list(text_with_beauty)], 0, spacing + 1)
 
 
-window = add_window_title(
-    make_window("thin", term_height, term_width),
-    "woah, hellow :D",
-    "🞀[", "]🞂"
-)
-print_to_console(window)
+if __name__ == "__main__":
+    window = add_window_title(
+        make_window("thin", term_height, term_width), "woah, hellow :D", "🞀[", "]🞂"
+    )
+    print_to_console(window)
